@@ -13,7 +13,6 @@ extends CharacterBody2D
 # preload บอกว่า "โหลด scene นี้พร้อมไว้เลย"
 # ใช้ดีกว่า load() ตอน runtime เพราะโหลดตอน complie time
 const BULLET_SCENE = preload("res://scenes/bullet.tscn")
-const DAMANGE_NUMBER_SCENE = preload("res://scenes/damage_number.tscn")
 
 var fire_timer: float = 0.0
 var current_exp: float = 0.0
@@ -71,6 +70,7 @@ func _try_shoot() -> void:
 	
 	# เพิ่ม bullet เข้า World ไม่ใช่ Player
 	# ถ้าเพิ่มใต้ Player กระสุนจะขยับตามตัวละครด้วย
+	SoundManager.play("shoot", -10.0)
 	get_parent().add_child(bullet)
 		
 func _level_up() -> void:
@@ -101,7 +101,7 @@ func take_damage(amount: float, knockback_source: Vector2 = Vector2.ZERO) -> voi
 		return
 	
 	current_hp -= amount
-	_spawn_damage_number(amount)
+	Utils.spawn_damage_number(amount, global_position, get_parent())
 	ui.update_hp(current_hp, max_hp) # <- อัปเดต bar
 	camera.shake()
 	print("HP: ", current_hp, " / ", max_hp)
@@ -136,16 +136,6 @@ func apply_upgrade(type: String) -> void:
 		"fire_rate":
 			fire_rate += 0.5
 			print("Fire Rate Up -> ", fire_rate)
-	
-	
-func _spawn_damage_number(amount: float) -> void:
-	var dmg_num: Node2D = DAMANGE_NUMBER_SCENE.instantiate()
-	
-	# make offset
-	dmg_num.position = global_position + Vector2(randf_range(-10, 10), -20)
-	
-	get_parent().add_child(dmg_num)
-	dmg_num.setup(amount)
 	
 func _apply_passive_bonus() -> void:
 	# stat เล็กน้อยทุก level

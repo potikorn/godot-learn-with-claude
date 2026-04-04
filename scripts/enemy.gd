@@ -5,7 +5,6 @@ extends CharacterBody2D
 @export var damage: float = 10.0
 
 const EXP_ORB_SCENE = preload("res://scenes/exp_orb.tscn")
-const DAMAGE_NUMBER_SCENE = preload("res://scenes/damage_number.tscn")
 
 const MAX_CHASE_DISTANCE = 1500.0
 const RESPAWN_DISTANCE = 800.0 # Spawn ห่างจาก player
@@ -45,7 +44,7 @@ func _physics_process(delta: float) -> void:
 	
 func take_damage(amount: float) -> void:
 	current_hp -= amount
-	_spawn_damage_number(amount)
+	Utils.spawn_damage_number(amount, global_position, get_parent())
 	_flash()
 	
 	if current_hp <= 0:
@@ -58,6 +57,7 @@ func _respawn_near_player() -> void:
 	global_position = player.global_position + offset
 		
 func _die() -> void:
+	SoundManager.play("enemy_die", -3.0)
 	# แจ้ง UI ให้อัปเดต enemy count
 	var ui = get_tree().get_first_node_in_group("ui")
 	if ui:
@@ -68,17 +68,6 @@ func _die() -> void:
 	orb.global_position = global_position
 	get_parent().add_child(orb)
 	queue_free()
-	
-func _spawn_damage_number(amount: float) -> void:
-	var dmg_num: Node2D = DAMAGE_NUMBER_SCENE.instantiate()
-	
-	# offset เล็กน้อยเพื่อไม่ให้ซ้อนกันพอดีเมื่อโดนยิงหลายลูก
-	dmg_num.position = global_position + Vector2(randf_range(-10, 10), -20)
-	
-	# เพิ่มใต้ World ไม่ใช่ enemy
-	# ถ้าเพิ่มใต้ Enemy พอ Enemy ตาย damage numbr จะหายไปด้วย
-	get_parent().add_child(dmg_num)
-	dmg_num.setup(amount)
 	
 func _flash() -> void:
 	var tween = create_tween()

@@ -21,4 +21,5 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
 		# เรียก method ของ enemy แทนการ queue_free ตรงๆ
 		body.take_damage(damage)
+		SoundManager.play("hit")
 		queue_free()

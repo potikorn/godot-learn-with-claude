@@ -29,6 +29,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		SoundManager.play("exp_collect", -8.0)
 		# บอกให้ player รับ exp - ใช้ signal แทนการเรียกตรง
 		body.collect_exp(exp_value)
 		queue_free()
