@@ -8,9 +8,13 @@ const SOUNDS = {
 	"exp_collect": preload("res://audios/pickupCoin.wav")
 }
 
+const BGM = preload("res://audios/bgm.wav")
+
+
 # pool ของ AudioStreamPlayer สำหรับเล่นหลายเสียงพร้อมกัน
 const POOL_SIZE = 8
 var _players: Array[AudioStreamPlayer] = []
+var _bgm_player: AudioStreamPlayer = null
 
 func _ready() -> void:
 	# สร้าง AudioStreamPlayer ไว้ล่วงหน้า POOL_SIZE ตัว
@@ -18,6 +22,24 @@ func _ready() -> void:
 		var player = AudioStreamPlayer.new()
 		add_child(player)
 		_players.append(player)
+		
+	# สร้าง BGM Player แยกต่างหาก
+	_bgm_player = AudioStreamPlayer.new()
+	_bgm_player.stream = BGM
+	_bgm_player.volume_db = -10.0 # เบากว่า sfx หน่อย
+	_bgm_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(_bgm_player)
+	
+func play_bgm() -> void:
+	if _bgm_player.playing:
+		return
+	_bgm_player.play()
+
+func stop_bgm() -> void:
+	_bgm_player.stop()
+
+func set_bgm_volume(db: float) -> void:
+	_bgm_player.volume_db = db
 		
 func play(sound_name: String, volume_db: float = 0.0) -> void:
 	if not SOUNDS.has(sound_name):

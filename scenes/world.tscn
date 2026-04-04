@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://vcbk55idecok"]
 
 [ext_resource type="Script" uid="uid://dbeabvpaang18" path="res://scripts/wave_manager.gd" id="1_71j4m"]
+[ext_resource type="Script" uid="uid://kk36dmotvv24" path="res://scripts/world.gd" id="1_k0juu"]
 [ext_resource type="PackedScene" uid="uid://cofwq3kv6b5e5" path="res://scenes/player.tscn" id="1_nnsk1"]
 [ext_resource type="Script" uid="uid://0jett0k12gep" path="res://scripts/ui.gd" id="3_4wyf3"]
 
@@ -19,6 +20,7 @@ corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
 [node name="World" type="Node2D" unique_id=1046480549]
+script = ExtResource("1_k0juu")
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=1627242421]
 script = ExtResource("1_71j4m")
