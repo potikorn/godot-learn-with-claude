@@ -1,0 +1,11 @@
+# Godot generated files
+.godot/
+
+# Mono/C# specific
+.mono/
+data_*/
+mono_crash.*.json
+
+# OS generated
+.DS_Store
+Thumbs.db
