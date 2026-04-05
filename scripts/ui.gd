@@ -106,8 +106,8 @@ func show_level_up() -> void:
 
 func _on_restart_pressed() -> void:
 	get_tree().paused = false
-	# โหลด scene ใหม่ทั้งหมด
-	get_tree().reload_current_scene()
+	# กลับ main menu แทน reload
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 	
 func _on_upgrade_selected(type: String) -> void:
 	level_up_screen.visible = false

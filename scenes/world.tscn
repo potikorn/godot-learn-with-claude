@@ -148,10 +148,11 @@ alignment = 1
 [node name="Label" type="Label" parent="UI/GameOverScreen/VBoxContainer" unique_id=716947672]
 layout_mode = 2
 text = "GAME OVER"
+horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="UI/GameOverScreen/VBoxContainer" unique_id=1156120493]
 layout_mode = 2
-text = "Restart"
+text = "Back to Menu"
 
 [node name="LevelUpScreen" type="Control" parent="UI" unique_id=1732509723]
 layout_mode = 3
@@ -240,7 +241,8 @@ alignment = 1
 [node name="Label" type="Label" parent="UI/VictoryScreen/VBoxContainer" unique_id=1693900121]
 layout_mode = 2
 text = "YOU WIN! 🎉"
+horizontal_alignment = 1
 
 [node name="Button" type="Button" parent="UI/VictoryScreen/VBoxContainer" unique_id=661185595]
 layout_mode = 2
-text = "Play Again"
+text = "Back to Menu"
