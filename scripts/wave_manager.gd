@@ -86,13 +86,35 @@ func _spawn_one_enemy() -> void:
 	var enemy: CharacterBody2D = ENEMY_SCENE.instantiate()
 	enemy.global_position = player.global_position + offset
 	
+	enemy.type = _pick_enemy_type()
+	
 	# scale HP และ speed ตาม wave
 	enemy.max_hp = 30.0 + (current_wave - 1) * 10.0
 	enemy.speed = 90.0 + (current_wave - 1) * 5.0
 	
 	add_child(enemy)
 	
+func _pick_enemy_type() -> int:
+	# wave แรกๆ มีแต่ normal
+	# ยิ่ง wave สูง โอกาสเจอ fast และ tank มากขึ้น
+	var roll = randf()  # 0.0 - 1.0
 	
+	if current_wave < 3:
+		return Enemy.Type.NORMAL
+	elif current_wave < 6:
+		# wave 3-5: 70% normal, 30% fast
+		if roll < 0.70:
+			return Enemy.Type.NORMAL
+		else:
+			return Enemy.Type.FAST
+	else:
+		# wave 6+: 50% normal, 30% fast, 20% tank
+		if roll < 0.50:
+			return Enemy.Type.NORMAL
+		elif roll < 0.80:
+			return Enemy.Type.FAST
+		else:
+			return Enemy.Type.TANK
 	
 	
 	

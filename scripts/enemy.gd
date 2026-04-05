@@ -1,4 +1,13 @@
+class_name Enemy
 extends CharacterBody2D
+
+enum Type {
+	NORMAL,
+	FAST,
+	TANK
+}
+
+@export var type: Type = Type.NORMAL
 
 @export var speed: float = 80.0
 @export var max_hp: float = 30.0
@@ -18,6 +27,7 @@ func _ready() -> void:
 	# หา player ใน scene โดยใช้ group
 	# อธิบายเพิ่มเติมด้านล่าง
 	player = get_tree().get_first_node_in_group("player")
+	_setup_type()
 	_spawn_animation()
 	
 func _physics_process(delta: float) -> void:
@@ -87,5 +97,26 @@ func _spawn_animation() -> void:
 	tween.tween_property(self, "scale", Vector2.ONE, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tween.parallel().tween_property(self, "modulate:a", 1.0, 0.2)
 	
+func _setup_type() -> void:
+	match type:
+		Type.NORMAL:
+			$ColorRect.color = Color.RED
+		Type.FAST:
+			max_hp *= 0.5       # HP น้อยกว่า
+			speed *= 2.0        # เร็วกว่า 2 เท่า
+			damage *= 0.75      # damage น้อยกว่านิดนึง
+			$ColorRect.color = Color.ORANGE
+		Type.TANK:
+			max_hp *= 3.0       # HP เยอะกว่า 3 เท่า
+			speed *= 0.5        # ช้ากว่า
+			damage *= 2.0       # damage มากกว่า
+			$ColorRect.color = Color.DARK_RED
+			# scale ใหญ่ขึ้นด้วยเพื่อให้เห็นชัด
+			# scale ColorRect โดยตรงแทน node แม่
+			$ColorRect.size = Vector2(60, 60)       # ขยายจาก 40x40
+			$ColorRect.position = Vector2(-30, -30) # offset ใหม่ให้อยู่กลาง
+			# ขยาย collision ด้วย
+			$CollisionShape2D.shape.size = Vector2(60, 60)
+	current_hp = max_hp  # set หลัง modify แล้ว
 	
 	
