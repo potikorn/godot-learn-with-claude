@@ -7,12 +7,10 @@ extends CharacterBody2D
 @export var exp_to_next_level: float = 50.0 # exp ที่ต้องการต่อเลเวล
 @export var max_hp: float = 100.0
 @export var invincibility_time: float = 0.5 # วินาทีที่โดนแล้วยังโดนซ้ำไม่ได้
-@export var auto_shoot: bool = true
-@export var bullet_damage: float = 10.0
 
 # preload บอกว่า "โหลด scene นี้พร้อมไว้เลย"
 # ใช้ดีกว่า load() ตอน runtime เพราะโหลดตอน complie time
-const BULLET_SCENE = preload("res://scenes/bullet.tscn")
+#const BULLET_SCENE = preload("res://scenes/bullet.tscn")
 
 var fire_timer: float = 0.0
 var current_exp: float = 0.0
@@ -37,41 +35,6 @@ func _physics_process(delta: float) -> void:
 	# สั่งให้ CharacterBody2D เคลื่อนที่จริงๆ
 	# move_and_slide จัดการชนกำแพง/พื้นให้อัตโนมัติ
 	move_and_slide()
-	
-	# === Auto Attack ===
-	if not auto_shoot:
-		return
-	fire_timer -= delta
-	if fire_timer <= 0:
-		fire_timer = 1.0 / fire_rate
-		_try_shoot()
-		
-func _try_shoot() -> void:
-	# หาศัตรูทั้งหมดใน scene
-	var enemies = get_tree().get_nodes_in_group("enemies")
-	if enemies.is_empty():
-		return
-		
-	# หาศัตรูที่ใกล้ที่สุด
-	var nearest: CharacterBody2D = enemies[0]
-	var nearest_dist = global_position.distance_to(nearest.global_position)
-	
-	for enemy: CharacterBody2D in enemies:
-		var dist = global_position.distance_to(enemy.global_position)
-		if dist < nearest_dist:
-			nearest = enemy
-			nearest_dist = dist
-	
-	# Spawn bullet
-	var bullet: Area2D = BULLET_SCENE.instantiate()
-	bullet.direction = global_position.direction_to(nearest.global_position)
-	bullet.global_position = global_position
-	bullet.damage = bullet_damage
-	
-	# เพิ่ม bullet เข้า World ไม่ใช่ Player
-	# ถ้าเพิ่มใต้ Player กระสุนจะขยับตามตัวละครด้วย
-	SoundManager.play("shoot", -10.0)
-	get_parent().add_child(bullet)
 		
 func _level_up() -> void:
 	current_level += 1
@@ -130,20 +93,16 @@ func apply_upgrade(type: String) -> void:
 		"speed":
 			speed += 50.0
 			print("Speed Up -> ", speed)
-		"damage":
-			bullet_damage += 5.0
-			print("Damage UP")
-		"fire_rate":
-			fire_rate += 0.5
-			print("Fire Rate Up -> ", fire_rate)
+		_:
+			for child in get_children():
+				if child.has_method("apply_upgrade"):
+					child.apply_upgrade(type)
 	
 func _apply_passive_bonus() -> void:
 	# stat เล็กน้อยทุก level
 	max_hp += 5.0
 	current_hp = min(current_hp + 5.0, max_hp)
-	ui.update_hp(current_hp, max_hp)
-	bullet_damage += 1.0
-	
+	ui.update_hp(current_hp, max_hp)	
 	
 	
 	

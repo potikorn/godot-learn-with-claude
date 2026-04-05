@@ -201,6 +201,10 @@ text = "DAMAGE UP"
 layout_mode = 2
 text = "Fire Rate UP"
 
+[node name="Button4" type="Button" parent="UI/LevelUpScreen/VBoxContainer" unique_id=1806481103]
+layout_mode = 2
+text = "Add More Orb"
+
 [node name="VictoryScreen" type="Control" parent="UI" unique_id=1473943656]
 layout_mode = 3
 anchors_preset = 15

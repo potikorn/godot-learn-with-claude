@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dluy71msu6goq"]
+
+[ext_resource type="Script" uid="uid://qentt7lerca1" path="res://scripts/weapons/single_shot_weapon.gd" id="1_u4gl0"]
+
+[node name="SingleShot" type="Node2D" unique_id=630789876]
+script = ExtResource("1_u4gl0")
+metadata/_custom_type_script = "uid://beg53r0kd8pps"

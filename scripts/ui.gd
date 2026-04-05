@@ -37,6 +37,9 @@ func _ready() -> void:
 	$LevelUpScreen/VBoxContainer/Button3.pressed.connect(
 		func(): _on_upgrade_selected("fire_rate")
 	)
+	$LevelUpScreen/VBoxContainer/Button4.pressed.connect(
+		func(): _on_upgrade_selected("add_orbit_bullet")
+	)
 	$VictoryScreen/VBoxContainer/Button.pressed.connect(_on_restart_pressed)
 	
 	# เชื่อม WaveManger signals

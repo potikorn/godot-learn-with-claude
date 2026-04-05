@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dp43hbxm0mok2" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://dy3eokcjp0eu6" path="res://scripts/camera.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://qentt7lerca1" path="res://scripts/weapons/single_shot_weapon.gd" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://bseqn0rx3fis5" path="res://scripts/weapons/orbit_weapon.gd" id="4_dqkch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3vyb7"]
 size = Vector2(40, 40)
@@ -19,6 +21,15 @@ offset_bottom = 20.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1027610002]
 shape = SubResource("RectangleShape2D_3vyb7")
+
+[node name="SingleShotWeapon" type="Node2D" parent="." unique_id=1601567547]
+script = ExtResource("2_qhqgy")
+metadata/_custom_type_script = "uid://qentt7lerca1"
+
+[node name="OrbitWeapon" type="Node2D" parent="." unique_id=1467209638]
+script = ExtResource("4_dqkch")
+damage = 5.0
+metadata/_custom_type_script = "uid://bseqn0rx3fis5"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=783825027]
 script = ExtResource("2_g2els")

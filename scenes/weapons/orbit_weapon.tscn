@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bn0vb2oqc6vyi"]
+
+[ext_resource type="Script" uid="uid://bseqn0rx3fis5" path="res://scripts/weapons/orbit_weapon.gd" id="1_h7dn0"]
+
+[node name="OrbitWeapon" type="Node2D" unique_id=312058163]
+script = ExtResource("1_h7dn0")
+metadata/_custom_type_script = "uid://bseqn0rx3fis5"
