@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c3587r1odma4t"]
+
+[ext_resource type="Script" uid="uid://elu7mxoingmb" path="res://scripts/weapons/spread_shot.gd" id="1_iaixa"]
+
+[node name="SpreadShot" type="Node2D" unique_id=1757003819]
+script = ExtResource("1_iaixa")
+bullet_count = 1
+metadata/_custom_type_script = "uid://bseqn0rx3fis5"

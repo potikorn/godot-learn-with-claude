@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cuvnvukvi8q5n"]
+
+[ext_resource type="Script" uid="uid://qentt7lerca1" path="res://scripts/weapons/single_shot.gd" id="1_4m4dc"]
+[ext_resource type="Script" uid="uid://c128p4j7jnmls" path="res://scripts/weapons/companion.gd" id="1_rm60a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gf3g0"]
+
+[node name="Companion" type="Area2D" unique_id=431037637]
+z_index = 2
+script = ExtResource("1_rm60a")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=488362053]
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+color = Color(0.8366541, 0.6134103, 0.9666639, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1292289761]
+shape = SubResource("RectangleShape2D_gf3g0")
+
+[node name="SingleShotWeapon" type="Node2D" parent="." unique_id=670408280]
+script = ExtResource("1_4m4dc")
+metadata/_custom_type_script = "uid://qentt7lerca1"

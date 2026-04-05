@@ -48,7 +48,7 @@ func take_damage(amount: float) -> void:
 	_flash()
 	
 	if current_hp <= 0:
-		_die()
+		_die.call_deferred()
 		
 func _respawn_near_player() -> void:
 	# สุ่มมุม 0-360 องศา แล้ว spawn ห่างออกไป
@@ -57,7 +57,7 @@ func _respawn_near_player() -> void:
 	global_position = player.global_position + offset
 		
 func _die() -> void:
-	SoundManager.play("enemy_die", -3.0)
+	SoundManager.play("enemy_died", -3.0)
 	# แจ้ง UI ให้อัปเดต enemy count
 	var ui = get_tree().get_first_node_in_group("ui")
 	if ui:

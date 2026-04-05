@@ -7,7 +7,7 @@ extends Node2D
 @export var auto_shoot: bool = true
 
 var fire_timer: float = 0.0
-var player: CharacterBody2D = null
+var player: Node2D = null
 
 func _ready() -> void:
 	# หา player จาก parent โดยตรง ไม่ต้องใช้ group
