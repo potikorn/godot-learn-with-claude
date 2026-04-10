@@ -30,6 +30,10 @@ window/layer_4="collectibles"
 player=""
 enemies=""
 
+[gui]
+
+theme/custom_font="uid://dycf4gh46reyg"
+
 [layer_names]
 
 2d_physics/layer_1="player"

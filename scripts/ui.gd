@@ -8,7 +8,8 @@ extends CanvasLayer
 @onready var exp_bar = $HUD/EXPBar
 @onready var wave_label = $HUD/WaveLabel
 @onready var enemy_label = $HUD/EnemyLabel
-@onready var break_label = $HUD/BreakLabel
+@onready var break_container = $HUD/PanelContainer
+@onready var break_label = %BreakLabel
 
 # @onready คือ "ดึง node นี้มาเพื่อ scene พร้อมแล้ว"
 # ถ้าดึงตอน _ready() มันจะยังไม่ ready เสมอไป
@@ -21,7 +22,7 @@ func _ready() -> void:
 	# ซ่อนทั้งคู่ตอนเริ่ม
 	game_over_screen.visible = false
 	level_up_screen.visible = false
-	break_label.visible = false
+	break_container.visible = false
 	victory_screen.visible = false
 	
 	# เชื่อมปุ่ม restart
@@ -58,7 +59,7 @@ func _process(delta: float) -> void:
 			break_label.text = "WAVE CLEAR!\nNext wave in: %d" % ceil(break_timer)
 		else:
 			is_counting_down = false
-			break_label.visible = false
+			break_container.visible = false
 			# บอก WaveManager ว่าพร้อมแล้ว
 			wave_manager.ready_for_next_wave.emit()
 			
@@ -115,7 +116,7 @@ func _on_upgrade_selected(type: String) -> void:
 	
 	# เริ่ม countdown หลังจาก unpause
 	is_counting_down = true
-	break_label.visible = true
+	break_container.visible = true
 	
 	# หา player แล้วส่ง upgrade ไป
 	var player = get_tree().get_first_node_in_group("player")
