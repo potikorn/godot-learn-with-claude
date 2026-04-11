@@ -24,6 +24,10 @@ script = ExtResource("1_k0juu")
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=1627242421]
 script = ExtResource("1_71j4m")
+base_enemy_count = 8
+enemy_count_scaling = 5
+hp_scaling = 15.0
+speed_scaling = 8.0
 
 [node name="Player" parent="." unique_id=751977680 instance=ExtResource("1_nnsk1")]
 position = Vector2(500, 300)

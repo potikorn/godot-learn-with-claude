@@ -9,6 +9,9 @@ signal ready_for_next_wave()
 @export var break_duration: float = 5.0
 @export var base_enemy_count: int = 5 # enemy wave แรก
 @export var enemy_count_scaling: int = 3 # เพิ่มต่อ wave
+@export var hp_scaling: float = 10.0
+#@export var base_enemy_speed: float = 80.0
+@export var speed_scaling: float = 5.0
 
 const ENEMY_SCENE = preload("res://scenes/enemy.tscn")
 
@@ -89,9 +92,9 @@ func _spawn_one_enemy() -> void:
 	enemy.type = _pick_enemy_type()
 	
 	# scale HP และ speed ตาม wave
-	enemy.max_hp = 30.0 + (current_wave - 1) * 10.0
-	enemy.speed = 90.0 + (current_wave - 1) * 5.0
-	
+	enemy.max_hp = 30.0 + (current_wave - 1) * hp_scaling
+	enemy.speed = 90.0 + (current_wave - 1) * speed_scaling
+	enemy.damage = 15.0
 	add_child(enemy)
 	
 func _pick_enemy_type() -> int:
