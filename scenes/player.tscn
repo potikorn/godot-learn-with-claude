@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bseqn0rx3fis5" path="res://scripts/weapons/orbit_weapon.gd" id="4_dqkch"]
 [ext_resource type="Script" uid="uid://cvn0ads8m11lt" path="res://scripts/weapons/companion_weapon.gd" id="5_tuyoq"]
 [ext_resource type="Script" uid="uid://c2clr1wl1bvj0" path="res://scripts/weapons/aoe_weapon.gd" id="6_fjrip"]
+[ext_resource type="Script" uid="uid://dswibnl3ducjk" path="res://scripts/weapons/homing_weapon.gd" id="7_smehm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3vyb7"]
 size = Vector2(40, 40)
@@ -54,6 +55,10 @@ grenade_lifespan = 1.3
 fire_rate = 0.3
 damage = 30.0
 metadata/_custom_type_script = "uid://c2clr1wl1bvj0"
+
+[node name="HomingWeapon" type="Node2D" parent="." unique_id=1590972089]
+script = ExtResource("7_smehm")
+metadata/_custom_type_script = "uid://dswibnl3ducjk"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=783825027]
 script = ExtResource("2_g2els")

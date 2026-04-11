@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://c5enkn205p8y1"]
+
+[ext_resource type="Script" uid="uid://cnhktx5rl6rjc" path="res://scripts/weapons/bullets/homing_bullet.gd" id="1_qogln"]
+
+[node name="HomingBullet" type="Area2D" unique_id=1195999745]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_qogln")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1812873432]
+rotation = 0.004836088
+color = Color(0, 1, 1, 1)
+polygon = PackedVector2Array(8.999895, -0.043524623, 2.0096488, 1.9903045, 1.0048244, 0.99515224, 0.014508208, 2.999965, -0.99515224, 1.0048244, -1.9999766, 0.009672139, -1.0048244, -0.99515224, -0.014508208, -2.999965, 0.99515224, -1.0048244, 1.9903045, -2.0096488)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1967420206]
+visible = false
+polygon = PackedVector2Array(0, -3, 3, 2, -3, 2)
