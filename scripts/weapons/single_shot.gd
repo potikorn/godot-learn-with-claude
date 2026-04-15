@@ -3,6 +3,13 @@ extends WeaponBase
 
 const BULLET_SCENE = preload("res://scenes/bullet.tscn")
 
+func apply_upgrade(type: String) -> void:
+	match type:
+		"damage":
+			damage += 10.0  # description: "Damage +10"
+		_:
+			super.apply_upgrade(type)
+
 func _try_shoot() -> void:
 	# หาศัตรูทั้งหมดใน scene
 	var enemies = get_tree().get_nodes_in_group("enemies")

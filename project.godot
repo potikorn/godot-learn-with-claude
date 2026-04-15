@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Utils="*uid://u4ys7oeud6bi"
 SoundManager="*uid://dfj12k1gxxv1j"
+UpgradeManager="*uid://mt5fimyl3yod"
 
 [display]
 

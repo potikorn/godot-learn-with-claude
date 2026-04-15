@@ -57,9 +57,11 @@ func add_bullet() -> void:
 	
 func apply_upgrade(type: String) -> void:
 	match type:
-		"damage":
-			damage += 1.0
-		"add_orbit_bullet":
+		"radius":
+			orbit_radius += 30.0
+		# แก้แล้ว: เดิมใช้ "add_orbit_bullet" แต่ upgrade_menu ส่ง "add_bullet"
+		# ใช้ "add_bullet" ให้ consistent กับ spread_shot
+		"add_bullet":
 			add_bullet()
 		_:
 			super.apply_upgrade(type)

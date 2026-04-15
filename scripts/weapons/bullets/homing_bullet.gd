@@ -57,7 +57,13 @@ func _find_nearest_enemy() -> Node2D:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies"):
-		var dmg = weapon.damage if weapon else 10.0
+		var dmg = _calc_damage()
 		body.take_damage(dmg)
 		SoundManager.play("hit")
 		queue_free()
+
+func _calc_damage() -> float:
+	if not weapon:
+		return 10.0
+	var mult = weapon.player.damage_multiplier if (weapon.player and "damage_multiplier" in weapon.player) else 1.0
+	return weapon.damage * mult

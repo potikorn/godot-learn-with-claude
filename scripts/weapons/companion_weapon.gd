@@ -53,5 +53,13 @@ func apply_upgrade(type: String) -> void:
 					var weapon = companion.get_node_or_null("SingleShotWeapon")
 					if weapon:
 						weapon.damage += 3.0
+		"fire_rate":
+			# lv3: propagate ไปหา SingleShotWeapon ของทุก companion จริงๆ
+			# (CompanionWeapon ตัวเองไม่ได้ยิง companion node เป็นคนยิง)
+			for companion in companions:
+				if is_instance_valid(companion):
+					var weapon = companion.get_node_or_null("SingleShotWeapon")
+					if weapon:
+						weapon.fire_rate += 0.5
 		_:
 			super.apply_upgrade(type)

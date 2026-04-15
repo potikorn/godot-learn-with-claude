@@ -17,10 +17,16 @@ func _physics_process(delta: float) -> void:
 	position += direction * speed * delta
 
 func _on_body_entered(body: Node2D) -> void:
-	# ถ้าชน enemy ให้ทำลาย enemy และ bullet
 	if body.is_in_group("enemies"):
-		var dmg = weapon.damage if weapon else 10.0
-		# เรียก method ของ enemy แทนการ queue_free ตรงๆ
+		var dmg = _calc_damage()
 		body.take_damage(dmg)
 		SoundManager.play("hit")
 		queue_free()
+
+func _calc_damage() -> float:
+	if not weapon:
+		return 10.0
+	# ใช้ duck typing เพราะ weapon.player อาจเป็น Companion ไม่ใช่ Player
+	# (companion's weapon มี parent เป็น Companion node ไม่ใช่ตัว Player จริงๆ)
+	var mult = weapon.player.damage_multiplier if (weapon.player and "damage_multiplier" in weapon.player) else 1.0
+	return weapon.damage * mult

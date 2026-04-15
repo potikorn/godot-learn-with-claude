@@ -44,9 +44,13 @@ func _try_shoot() -> void:
 func apply_upgrade(type: String) -> void:
 	match type:
 		"damage":
-			damage += 2.0
+			damage += 8.0  # description: "Damage +8"
 		"fire_rate":
 			fire_rate += 0.25
+		"add_bullet":
+			bullet_count += 2
+		_:
+			super.apply_upgrade(type)
 	
 	
 	

@@ -4,4 +4,6 @@
 
 [node name="SingleShot" type="Node2D" unique_id=630789876]
 script = ExtResource("1_u4gl0")
+damage = 10.0
+fire_rate = 2.0
 metadata/_custom_type_script = "uid://beg53r0kd8pps"

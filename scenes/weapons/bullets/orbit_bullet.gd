@@ -17,8 +17,14 @@ func _physics_process(delta: float) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemies") and hit_timer <= 0:
-		var dmg = weapon.damage if weapon else 10.0
+		var dmg = _calc_damage()
 		body.take_damage(dmg)
 		SoundManager.play("hit")
-		hit_timer = hit_cooldown # รอก่อนจะ hit ได้อีก
+		hit_timer = hit_cooldown
 		# ไม่ queue_free() — orbit bullet ไม่หายไป!
+
+func _calc_damage() -> float:
+	if not weapon:
+		return 10.0
+	var mult = weapon.player.damage_multiplier if (weapon.player and "damage_multiplier" in weapon.player) else 1.0
+	return weapon.damage * mult

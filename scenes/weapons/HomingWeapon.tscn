@@ -2,5 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dswibnl3ducjk" path="res://scripts/weapons/homing_weapon.gd" id="1_7vqot"]
 
-[node name="HomingWeapon" type="Node" unique_id=313797408]
+[node name="HomingWeapon" type="Node2D" unique_id=1534662070]
 script = ExtResource("1_7vqot")
+damage = 14.0
+fire_rate = 0.8

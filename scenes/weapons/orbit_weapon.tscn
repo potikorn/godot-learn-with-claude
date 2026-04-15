@@ -4,4 +4,5 @@
 
 [node name="OrbitWeapon" type="Node2D" unique_id=312058163]
 script = ExtResource("1_h7dn0")
+damage = 5.0
 metadata/_custom_type_script = "uid://bseqn0rx3fis5"

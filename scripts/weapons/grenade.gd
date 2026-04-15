@@ -30,16 +30,18 @@ func _explode() -> void:
 	if has_exploded:
 		return
 	has_exploded = true
-	
+
 	var explosion: Explosion = EXPLOSION_SCENE.instantiate()
 	explosion.global_position = global_position
-	
-	# ส่ง damage จาก weapon
+
 	if weapon:
-		explosion.damage = weapon.damage
-	
+		# คำนวณ damage รวม multiplier จาก player ตอนระเบิด
+		var mult = weapon.player.damage_multiplier if (weapon.player and "damage_multiplier" in weapon.player) else 1.0
+		explosion.damage = weapon.damage * mult
+		if "explosion_radius" in weapon:
+			explosion.radius = weapon.explosion_radius
+
 	get_parent().add_child(explosion)
-	# รอ frame นึงให้ explosion setup collision ก่อน
 	explosion.explode()
 	print("explode deferred called")
 	queue_free()

@@ -1,6 +1,5 @@
 extends CanvasLayer
 
-# อ้างอิง node ลูก
 @onready var game_over_screen = $GameOverScreen
 @onready var level_up_screen = $LevelUpScreen
 @onready var victory_screen = $VictoryScreen
@@ -11,48 +10,45 @@ extends CanvasLayer
 @onready var break_container = $HUD/PanelContainer
 @onready var break_label = %BreakLabel
 
-# @onready คือ "ดึง node นี้มาเพื่อ scene พร้อมแล้ว"
-# ถ้าดึงตอน _ready() มันจะยังไม่ ready เสมอไป
-
 var wave_manager: Node = null
 var break_timer: float = 0.0
 var is_counting_down: bool = false
 
+# เก็บ upgrade ที่กำลังแสดงอยู่ เพื่อรู้ว่าปุ่มไหนคือ upgrade อะไร
+var _pending_upgrades: Array[Dictionary] = []
+
 func _ready() -> void:
-	# ซ่อนทั้งคู่ตอนเริ่ม
 	game_over_screen.visible = false
 	level_up_screen.visible = false
 	break_container.visible = false
 	victory_screen.visible = false
-	
-	# เชื่อมปุ่ม restart
+
+	# Reset run state ทุกครั้งที่เริ่มเกมใหม่
+	# (Singleton ยังมีชีวิตอยู่ข้ามการ change_scene ดังนั้นต้อง reset เอง)
+	UpgradeManager.reset()
+
+	# ปุ่ม restart / victory
 	$GameOverScreen/VBoxContainer/Button.pressed.connect(_on_restart_pressed)
-	
-	# เชื่อมปุ่ม upgrade ทั้งสาม
-	$LevelUpScreen/VBoxContainer/Button.pressed.connect(
-		func(): _on_upgrade_selected("speed")
-	)
-	$LevelUpScreen/VBoxContainer/Button2.pressed.connect(
-		func(): _on_upgrade_selected("damage")
-	)
-	$LevelUpScreen/VBoxContainer/Button3.pressed.connect(
-		func(): _on_upgrade_selected("fire_rate")
-	)
-	$LevelUpScreen/VBoxContainer/Button4.pressed.connect(
-		func(): _on_upgrade_selected("add_orbit_bullet")
-	)
 	$VictoryScreen/VBoxContainer/Button.pressed.connect(_on_restart_pressed)
-	
-	# เชื่อม WaveManger signals
+
+	# ปุ่ม upgrade — ตอนนี้ใช้ index แทน hardcode type
+	# ข้อความบนปุ่มจะถูก set ตอน show_level_up() ทุกครั้ง
+	$LevelUpScreen/VBoxContainer/Button.pressed.connect(func(): _on_upgrade_selected(0))
+	$LevelUpScreen/VBoxContainer/Button2.pressed.connect(func(): _on_upgrade_selected(1))
+	$LevelUpScreen/VBoxContainer/Button3.pressed.connect(func(): _on_upgrade_selected(2))
+	# Button4 (add_orbit_bullet เก่า) ไม่ใช้แล้ว — ซ่อนไว้
+	if $LevelUpScreen/VBoxContainer.has_node("Button4"):
+		$LevelUpScreen/VBoxContainer/Button4.visible = false
+
+	# เชื่อม WaveManager signals
 	wave_manager = get_parent().get_node("WaveManager")
 	wave_manager.wave_started.connect(_on_wave_started)
 	wave_manager.wave_completed.connect(_on_wave_completed)
 	wave_manager.all_waves_completed.connect(_on_all_waves_completed)
-	
+
 func _process(delta: float) -> void:
 	_update_enemy_count()
-	
-	# countdown ระหว่าง wave
+
 	if is_counting_down:
 		break_timer -= delta
 		if break_timer > 0:
@@ -60,65 +56,87 @@ func _process(delta: float) -> void:
 		else:
 			is_counting_down = false
 			break_container.visible = false
-			# บอก WaveManager ว่าพร้อมแล้ว
 			wave_manager.ready_for_next_wave.emit()
-			
-# Wave signals
+
+# === Wave signals ===
+
 func _on_wave_started(wave_number: int) -> void:
 	wave_label.text = "Wave %d / %d" % [wave_number, 10]
 	_update_enemy_count()
-	
-func _on_wave_completed(wave_number: int) -> void:
-	# แสดง upgrade menu ตรงนี้แทน
+
+func _on_wave_completed(_wave_number: int) -> void:
 	show_level_up()
-	
-	# เริ่ม countdown หลัง upgrade เสร็จ
 	break_timer = 5.0
-	is_counting_down = false # จะเริ่มหลัง unpause
-	
+	is_counting_down = false  # จะเริ่มหลัง upgrade เสร็จ
+
 func _on_all_waves_completed() -> void:
 	victory_screen.visible = true
 	get_tree().paused = true
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	
+
+# === Upgrade UI ===
+
+func show_level_up() -> void:
+	_pending_upgrades = UpgradeManager.get_random_upgrades()
+
+	# ถ้า pool ว่าง (weapon ทุกตัว max lv3 ครบแล้ว) ข้าม upgrade screen
+	# ไม่งั้นเกมจะ pause ค้างโดยไม่มีปุ่มให้กด
+	if _pending_upgrades.is_empty():
+		is_counting_down = true
+		break_container.visible = true
+		return
+
+	var buttons = [
+		$LevelUpScreen/VBoxContainer/Button,
+		$LevelUpScreen/VBoxContainer/Button2,
+		$LevelUpScreen/VBoxContainer/Button3,
+	]
+
+	for i in buttons.size():
+		if i < _pending_upgrades.size():
+			var up = _pending_upgrades[i]
+			buttons[i].text = up["title"] + "\n" + up["description"]
+			buttons[i].visible = true
+		else:
+			buttons[i].visible = false
+
+	level_up_screen.visible = true
+	get_tree().paused = true
+
+func _on_upgrade_selected(index: int) -> void:
+	# ซ่อน UI ก่อน unpause
+	level_up_screen.visible = false
+	get_tree().paused = false
+
+	# เริ่ม countdown ระหว่าง wave
+	is_counting_down = true
+	break_container.visible = true
+
+	# Apply upgrade ผ่าน manager (manager จัดการ spawn/upgrade weapon เอง)
+	if index < _pending_upgrades.size():
+		UpgradeManager.apply_upgrade(_pending_upgrades[index])
+
+# === HUD ===
+
 func _update_enemy_count() -> void:
 	var count = get_tree().get_nodes_in_group("enemies").size()
 	enemy_label.text = "Enemies: %d" % count
 
 func notify_enemy_died() -> void:
 	_update_enemy_count()
-	
+
 func update_hp(current: float, maximum: float) -> void:
 	hp_bar.max_value = maximum
 	hp_bar.value = current
-	
+
 func update_exp(current: float, maximum: float) -> void:
 	exp_bar.max_value = maximum
 	exp_bar.value = current
-	
+
 func show_game_over() -> void:
 	game_over_screen.visible = true
-	# process_mode ของ UI ต้อง Always เพราะเกม pause อยู่
 	process_mode = Node.PROCESS_MODE_ALWAYS
-
-func show_level_up() -> void:
-	level_up_screen.visible = true
-	get_tree().paused = true
 
 func _on_restart_pressed() -> void:
 	get_tree().paused = false
-	# กลับ main menu แทน reload
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
-	
-func _on_upgrade_selected(type: String) -> void:
-	level_up_screen.visible = false
-	get_tree().paused = false
-	
-	# เริ่ม countdown หลังจาก unpause
-	is_counting_down = true
-	break_container.visible = true
-	
-	# หา player แล้วส่ง upgrade ไป
-	var player = get_tree().get_first_node_in_group("player")
-	if player:
-		player.apply_upgrade(type)

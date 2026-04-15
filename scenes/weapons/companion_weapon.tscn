@@ -4,3 +4,4 @@
 
 [node name="CompanionWeapon" type="Node2D" unique_id=355211066]
 script = ExtResource("1_3yy4t")
+damage = 8.0
